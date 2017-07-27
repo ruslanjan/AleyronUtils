@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!--Import Google Icon Font-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!--Import materialize.css-->
+    <link type="text/css" rel="stylesheet" href="css/materialize.min.css" media="screen,projection"/>
+
+    <!--Let browser know website is optimized for mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" charset="UTF-8"/>
+</head>
+
+<body>
+<header>
+    <nav class="teal">
+        <div class="container">
+            <div class="nav-wrapper">
+                <a href="#" class="brand-logo center">Aleyron Utils</a>
+            </div>
+        </div>
+    </nav>
+</header>
+<div class="container">
+    <div class="row">
+        <div class="col m6">
+            <div class="card hoverable" id="test">
+                <div class="card-content">
+                    <span class="card-title">Ввод</span>
+                    <div class="row">
+                        <div class="input-field col m6">
+                            <input id="k" type="number" class="validate" value="">
+                            <label for="k">Сколько помещается на печатном листе</label>
+                        </div>
+                        <div class="col m6">
+                            <div class="row">
+                                <div class="col m12 center-align">
+                                    <span class="green-text">Количество видов: <span id="sz">0</span></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col m6">
+                                    <a class="btn-floating btn-large waves-effect waves-light green right" id="add"><i
+                                            class="material-icons">add</i></a>
+                                </div>
+                                <div class="col m6">
+                                    <a class="btn-floating btn-large waves-effect waves-light red left" id="remove"><i
+                                            class="material-icons">remove</i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col m12">
+                            <div class="row">
+                                <div class="col m12">
+                                    <table class="highlight centered">
+                                        <thead>
+                                        <tr>
+                                            <th><span>Вид</span></th>
+                                            <th>Тираж</th>
+                                            <th>
+                                                <input type="checkbox" id="pinAll"/>
+                                                <label for="pinAll">Выделить Все</label>
+                                            </th>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="list">
+                                        <!--
+                                        <tr id="1">
+                                            <td>
+                                                <span>1</span>
+                                            </td>
+                                            <td>
+                                                <div contenteditable type="number" class="validate">0</div>
+                                            </td>
+                                            <td>
+                                                <input type="checkbox" id="1ch"/>
+                                                <label for="1ch">Выделить</label>
+                                            </td>
+                                        </tr>
+                                        -->
+                                        </tbody>
+                                    </table>
+                                    <div class="divider"></div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col m12">
+                                    <a id="removeSelected" class="waves-effect waves-light btn red right">удалить
+                                        выбранное</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-action">
+                    <a class="waves-effect waves-light btn" id="calc">Просчитать</a>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col m12">
+                    <div class="card hoverable">
+                        <div class="card-content">
+                            <span class="card-title">Сессия</span>
+                            <div class="row">
+                                <div class="col m6">
+                                    <div class="row">
+                                        <div class="col m12">
+                                            <span>ID сессии:</span>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col m12" style="word-wrap: break-word;">
+                                            <p id="hash">21312312desdvff31f`21asdasdasdasdasdasdasd</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col m6">
+                                    <div class="input-field">
+                                        <input id="ID" type="text" class="validate">
+                                        <label for="ID">ID</label>
+                                    </div>
+                                    <a class="waves-effect waves-light btn right">Загрузить</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col m6">
+            <div class="card hoverable">
+                <div class="card-content">
+                    <span class="card-title">Вывод</span>
+                    <div class="row">
+                        <div class="col m4">
+                            <table class="centered">
+                                <tbody>
+                                <tr>
+                                    <td>
+                                        <span>Листов:</span>
+                                    </td>
+                                    <td>
+                                        <span id="m">0</span>
+                                    </td>
+                                    <td>
+                                        <span>Излишки:</span>
+                                    </td>
+                                    <td>
+                                        <span id="iz">0</span>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col m12">
+                            <div class="row">
+                                <div class="col m12">
+                                    <table class="highlight centered">
+                                        <thead>
+                                        <tr>
+                                            <th><span>Вид</span></th>
+                                            <th>Количество на пластине</th>
+                                            <th>Излишки</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="solv">
+                                        <!--
+                                        <tr id="1">
+                                            <td>
+                                                <span>1</span>
+                                            </td>
+                                            <td>
+                                                <div contenteditable type="number" class="validate">0</div>
+                                            </td>
+                                            <td>
+                                                <input type="checkbox" id="1ch"/>
+                                                <label for="1ch">Выделить</label>
+                                            </td>
+                                        </tr>
+                                        -->
+                                        </tbody>
+                                    </table>
+                                    <div class="divider"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<!--Import jQuery before materialize.js-->
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/materialize.min.js"></script>
+<script>
+    $(document).ready(function () {
+        if (!String.prototype.format) {
+            String.prototype.format = function () {
+                var args = arguments;
+                return this.replace(/{(\d+)}/g, function (match, number) {
+                    return typeof args[number] != 'undefined'
+                        ? args[number]
+                        : match
+                        ;
+                });
+            };
+        }
+
+
+        var n = 0;
+        var a = [];
+        var c = 0;
+
+        function checker() {
+            n = a.length;
+            $('#sz').html(n.toString());
+            var cnt = 0;
+            for (var i = 0; i < a.length; ++i) {
+                if ($('#' + a[i].toString() + 'ch').prop('checked')) {
+                    cnt++;
+                }
+            }
+            if (cnt === a.length) {
+                $("#pinAll").prop('checked', true);
+            } else {
+                $("#pinAll").prop('checked', false);
+            }
+        }
+
+        $("#pinAll").bind("click", function () {
+            if ($("#pinAll").prop('checked')) {
+                for (var i = 0; i < a.length; ++i) {
+                    $('#' + a[i].toString() + 'ch').prop('checked', true);
+                }
+            } else {
+                for (var i = 0; i < a.length; ++i) {
+                    $('#' + a[i].toString() + 'ch').prop('checked', false);
+                }
+            }
+        });
+        $("#add").bind("click", function () {
+            c++;
+            $('#list').append('<tr id="{0}"><td><div contenteditable id="name{0}" style="word-wrap: break-word;">{0}</div></td><td><div id="val{0}" contenteditable class="green-text">0</div></td><td><input type="checkbox" id="{0}ch"/><label for="{0}ch">Выделить</label></td></tr>\n'.format(c.toString()));
+            $('#' + c.toString() + 'ch').bind('click', checker);
+            a.push(c);
+            checker();
+        });
+        $("#remove").bind("click", function () {
+            if (a.length > 0) {
+                $('#' + a[a.length - 1].toString()).remove();
+                a.pop();
+                if (a.length > 0) {
+                    c = a[a.length - 1];
+                } else {
+                    c = 0;
+                }
+                checker();
+            }
+        });
+        $('#removeSelected').bind('click', function () {
+            var d = [];
+            for (var i = 0; i < a.length; ++i) {
+                if ($('#' + a[i].toString() + 'ch').prop('checked')) {
+                    $('#' + a[i].toString()).remove();
+                } else {
+                    d.push(a[i]);
+                }
+            }
+            a = d;
+            if (a.length > 0) {
+                c = a[a.length - 1];
+            } else {
+                c = 0;
+            }
+            checker();
+        });
+
+        function solve(k, e) {
+            var l, r;
+            l = 0;
+            r = 1000000;
+            var m = -1;
+
+            function check(m, k) {
+                var sum = 0;
+                for (var i = 0; i < a.length; ++i) {
+                    sum += Math.ceil(e[i] / m);
+                }
+                return sum <= k;
+            }
+
+            while (r - l > 1) {
+                m = ((r + l) >> 1);
+                if (check(m, k)) {
+                    r = m;
+                } else {
+                    l = m;
+                }
+            }
+            if (check(r, k)) {
+                return r;
+            } else {
+                return -1;
+            }
+        }
+
+        $('#calc').bind('click', function () {
+            var k = parseInt($('#k').val());
+            var e = [];
+            var typename = [];
+            checker();
+            for (var i = 0; i < a.length; ++i) {
+                typename[i] = $("#name" + a[i].toString()).text();
+                e[i] = parseInt($('#val' + a[i].toString()).text());
+                if (isNaN(e[i])) {
+                    $('#m').html('<span class="red-text">Не правильный ввод</span>');
+                    return;
+                }
+            }
+            $('#solv').empty();
+            var m = solve(k, e);
+            if (isNaN(k)) {
+                $('#m').html('<span class="red-text">правильный ввод</span>');
+                return;
+            }
+            if (m === -1 || isNaN(k)) {
+                $('#m').html('<span class="red-text">Нет решения</span>');
+            } else {
+                $('#m').html('<span class="green-text">' + m.toString() + '</span>');
+                var sum = 0;
+                for (var i = 0; i < a.length; ++i) {
+                    $('#solv').append('<tr><td><span>{0}</span></td><td><span>{1}</span></td><td><span>{2}</span></td></tr>'.format(typename[i], Math.ceil(e[i] / m), m * Math.ceil(e[i] / m) - e[i]));
+                    sum += m * Math.ceil(e[i] / m) - e[i];
+                }
+                $('#iz').html(sum);
+            }
+        });
+    });
+</script>
+</body>
+</html>
