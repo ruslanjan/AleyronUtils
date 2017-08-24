@@ -268,6 +268,10 @@
 	                	Materialize.toast('нечего просчитывать', 5000)
 	                	return;
 	                }
+	                if (cnt * k  < app.product_list_size) {
+	                	Materialize.toast('нет решения', 10000);
+	                	return;
+	                }
 	                for (var i = 0; i < app.product_list_size; ++i) {
 	                    if (app.product_list[i].number === '') {
 	                        //alert('не введено количество у вида с названием "' + app.product_list[i].name + '"');
@@ -364,7 +368,7 @@
 	                for (var i = 1; i < app.product_list_size; ++i) {
 	                	for (var j = 1; j < cnt; ++j) {
 	                		for (var l = i; l > 0; --l) {
-	                			if (dp[i][j] > dp[l - 1][j - 1] + (a[i][0] - a[l][0])) {//checkPlate(l, i + 1)) {
+	                			if ((i - l + 1 <= k) && dp[i][j] > dp[l - 1][j - 1] + (a[i][0] - a[l][0])) {//checkPlate(l, i + 1)) {
 	                				p[i][j] = l - 1;
 	                				dp[i][j] = dp[l - 1][j - 1] + (a[i][0] - a[l][0]);//checkPlate(l, i + 1);
 	                			}
