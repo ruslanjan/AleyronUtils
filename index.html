@@ -2,7 +2,7 @@
 	<html>
 	<head>
 	    <!--Import Google Icon Font-->
-	    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	    <link href="css/icons.css" rel="stylesheet">
 	    <!--Import materialize.css-->
 	    <link type="text/css" rel="stylesheet" href="css/materialize.css" media="screen,projection"/>
 
@@ -58,6 +58,23 @@
 	                        </div>
 	                    </div>
 	                    <div class="row">
+	                    	<div class="col m12">
+	                    		<span class="flow-text">Опции</span>
+	                    	</div>
+	                    	<div class="row">
+	                    		<div class="col m6">
+		                            <p>
+										<input class="cyan" name="group1" type="radio" id="test1" checked/>
+										<label for="test1">Чужой оборот</label>
+									</p>
+									<p>
+										<input class="cyan" name="group1" type="radio" id="test2"/>
+										<label for="test2">Свой оборот</label>
+		    						</p>
+								</div>
+	                    	</div>
+	                    </div>
+	                    <!--<div class="row">
 	                            <div class="input-field col m12"> 
 	                            		<span class="flow-text">Минимизировать</span>
 	                            </div>
@@ -75,7 +92,7 @@
 		    							</p>
 	    							</div>
 	                            </div>
-	                    </div>
+	                    </div>-->
 	                    <div class="row">
 	                        <div class="col m12 s12">
 	                            <div class="row">
@@ -102,26 +119,37 @@
 	            </div>
 	        </div>
 	    </div>
+	    <div class="row col m12">
+	    	<div class="col m12">
+	    		<div class="card hoverable">
+		    		<div class="card-content">
+		    			<span class="card-title">Нужные числа</span>
+		    			<div class="row">
+	                    	<div class="col m12 center-align">
+	                    		<!--<table-plate-result v-bind:result="result[0]" v-bind:plate_id="0"></table-plate-result>-->
+	                    		<div class="col m5">
+	                    		<span class="flow-text text-accent-4 ">Всего будет отпечатано: <span>{{productSum}}</span></span>
+	                    		</div>
+	                    		<div class="col m3">
+	                    		<span class="flow-text green-text text-accent-4 ">Всего листов: <span>{{pageSum}}</span></span>
+	                    		</div>
+	                    		<div class="col m4">
+	                    		<span class="flow-text red-text text-accent-4">Всего излишок: <span>{{overSum}}</span></span>
+	                    		</div>
+	                    	</div>
+	                    </div>
+		    		</div>
+	    		</div>
+	    	</div>
+	    </div>
 	    <div class="row">
 	    	<div class="col m12">
 		    	<div class="card hoverable">
 		    		<div class="card-content">
 	                    <span class="card-title">Результат</span>
-	                    
 	                    <div class="row">
 	                    	<div class="col m12 center-align">
-	                    		<!--<table-plate-result v-bind:result="result[0]" v-bind:plate_id="0"></table-plate-result>-->
-	                    		<div class="col m6">
-	                    		<span class="flow-text green-text text-accent-4 ">Всего листов: <span>{{pageSum}}</span></span>
-	                    		</div>
-	                    		<div class="col m6">
-	                    		<span class="flow-text red-text text-accent-4">Всего излишок: <span>{{overSum}}</span></span>
-	                    		</div>
-	                    	</div>
-	                    </div>
-	                    <div class="row">
-	                    	<div class="col m12 center-align">
-	                    		<ul class="collapsible" data-collapsible="expandable">
+	                    		<ul class="collapsible popout" data-collapsible="accordion">
 	                    			
 
 	                    			<plate-result-view 
@@ -213,7 +241,8 @@
 	            result: [],
 	            pageSum: 0,
 	            overSum: 0,
-	            plateRes: []
+	            productSum: 0,
+	            plateRes: [],
 	            
 	        },
 	        methods: {
@@ -235,12 +264,14 @@
 	                var a = [];
 	                var b = [];
 	                if (app.product_list_size == 0) {
-	                	alert("нечего просчитывать");
+	                	//alert("нечего просчитывать");
+	                	Materialize.toast('нечего просчитывать', 5000)
 	                	return;
 	                }
 	                for (var i = 0; i < app.product_list_size; ++i) {
 	                    if (app.product_list[i].number === '') {
-	                        alert('не введено количество у вида с названием "' + app.product_list[i].name + '"');
+	                        //alert('не введено количество у вида с названием "' + app.product_list[i].name + '"');
+	                        Materialize.toast('не введено количество у вида с названием "' + app.product_list[i].name + '"', 10000)
 	                    }
 	                    a.push([app.product_list[i].number, [app.product_list[i].id, app.product_list[i].name]]);
 	                }
@@ -333,16 +364,16 @@
 	                for (var i = 1; i < app.product_list_size; ++i) {
 	                	for (var j = 1; j < cnt; ++j) {
 	                		for (var l = i; l > 0; --l) {
-	                			if (dp[i][j] > dp[l - 1][j - 1] + checkPlate(l, i + 1)) {
+	                			if (dp[i][j] > dp[l - 1][j - 1] + (a[i][0] - a[l][0])) {//checkPlate(l, i + 1)) {
 	                				p[i][j] = l - 1;
-	                				dp[i][j] = dp[l - 1][j - 1] + checkPlate(l, i + 1);
+	                				dp[i][j] = dp[l - 1][j - 1] + (a[i][0] - a[l][0]);//checkPlate(l, i + 1);
 	                			}
 	                			//dp[i][j] = Math.min (dp[i][j], dp[l - 1][j - 1] + checkPlate(l, i + 1));
 	                		}
 	                	}
 	                }
 	                if (dp[app.product_list_size - 1][cnt - 1] === 1000000000)
-	                	alert('нет рещения!!!');
+	                	Materialize.toast('нет рещения!!!', 4000)
 	                else {
 	                	var j = app.product_list_size - 1;
 	                	var c = cnt - 1;
@@ -397,6 +428,7 @@
 		                app.plateRes[id].overSum = 0;
 		                app.plateRes[id].types = [];
 		                app.plateRes[id].id = id + 1;
+		                app.productSum = 0;
 		                //console.log(123);
 		                for (var i = 0; i < app.result[id].length; ++i) {
 		                	app.plateRes[id].types.push({});
@@ -405,6 +437,7 @@
 		                for (var i = 0; i < app.result[id].length; ++i) {
 		                	//console.log(app.plateRes[id].types[i]);
 		                	app.plateRes[id].types[i].over = Math.ceil(app.result[id][i][0]/m) * m - app.result[id][i][0];
+		                	app.productSum += Math.ceil(app.result[id][i][0]/m) * m;
 		                	app.plateRes[id].types[i].number = Math.ceil(app.result[id][i][0]/m);
 		                	app.plateRes[id].types[i].tname = app.result[id][i][1][1];
 		                	app.plateRes[id].overSum += app.plateRes[id].types[i].over;
@@ -463,5 +496,4 @@
 	</script>
 	</body>
 	</html>
-	<table class="highlight centered">
 
