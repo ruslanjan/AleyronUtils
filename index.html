@@ -432,7 +432,6 @@
 		                app.plateRes[id].overSum = 0;
 		                app.plateRes[id].types = [];
 		                app.plateRes[id].id = id + 1;
-		                app.productSum = 0;
 		                //console.log(123);
 		                for (var i = 0; i < app.result[id].length; ++i) {
 		                	app.plateRes[id].types.push({});
@@ -453,6 +452,7 @@
 	                app.plateRes = [];
 	                app.overSum = 0;
 	                app.pageSum = 0;
+	                app.productSum = 0;
 	                for (var i = 0; i < cnt; ++i) {
 	                	app.plateRes.push({});
 	                	update(i);
