@@ -113,8 +113,13 @@
 										<label for="test1">Чужой оборот</label>
 									</p>
 									<p>
-										<input class="cyan" name="group1" type="radio" id="test2"/>
+										<input class="cyan" name="group1" type="radio" id="test2" disabled="" />
 										<label for="test2">Свой оборот</label>
+		    						</p>
+		    						<p>
+		    							<div class="input-field inline">
+							            	<a class="waves-effect waves-light btn cyan accent-4" href="print.html" vtarget="_blank">Печать</a>
+										</div>
 		    						</p>
 								</div>
 		                    </div>
@@ -275,7 +280,7 @@
 
 	    Vue.component('plate-result-view', {
 	    	props: ['plate'],
-	    	template: '<li><div class="collapsible-header"><span>Печатная пластина #{{plate.id}}</span></div><div class="collapsible-body"><div class="row"><div class="col m12 center-align"> <!--<table-plate-result v-bind:result="result[0]" v-bind:plate_id="0"></table-plate-result>--> <div class="col m6"> <span class="flow-text green-text text-accent-4 ">листов: <span>{{plate.pageSum}}</span></span> </div> <div class="col m6"> <span class="flow-text red-text text-accent-4">излишок: <span>{{plate.overSum}}</span></span> </div> </div> </div> <div class="row"> <div class="col m12"> <table-plate-result v-bind:plate="plate"> </table-plate-result> </div> </div> </div> </li>',
+	    	template: '<li><div class="collapsible-header"><span>Печатная пластина #{{plate.id}}</span></div><div class="collapsible-body"><div class="row"><div class="col m12 center-align"> <!--<table-plate-result v-bind:result="result[0]" v-bind:plate_id="0"></table-plate-result>--> <div class="col m6"> <span class="flow-text green-text text-accent-4 ">листов: <span>{{plate.pageSum}}</span></span> </div> <div class="col m6"> <span class="flow-text red-text text-accent-4">излишки: <span>{{plate.overSum}}</span></span> </div> </div> </div> <div class="row"> <div class="col m12"> <table-plate-result v-bind:plate="plate"> </table-plate-result> </div> </div> </div> </li>',
 	    });
 	    var app = new Vue({
 	        el: '#app',
