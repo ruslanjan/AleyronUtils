@@ -22,7 +22,7 @@
 	</header>
 	<div class="container" id="app">
 	    <div class="row">
-	        <div class="col m8">
+	        <div class="col m8 s12">
 	            <div class="card hoverable">
 	                <div class="card-content">
 	                    <span class="card-title">Ввод</span>
@@ -427,7 +427,7 @@
 	                		}
 	                	}
 	                }
-	                if (dp[app.product_list_size - 1][cnt - 1] === 1000000000)
+	                if (dp[app.product_list_size - 1][cnt - 1] >= 1000000000)
 	                	Materialize.toast('нет рещения!!!', 4000)
 	                else {
 	                	var j = app.product_list_size - 1;
