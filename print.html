@@ -1,0 +1,455 @@
+	<!DOCTYPE html>
+	<html>
+	<head>
+		<!--Import Google Icon Font-->
+	    <link href="css/icons.css" rel="stylesheet">
+	    <!--Import materialize.css-->
+	    <link type="text/css" rel="stylesheet" href="css/materialize.css" media="screen,projection"/>
+	    <style type="text/css">
+		   TABLE {
+		    width: 300px; /* Ширина таблицы */
+		    border-collapse: collapse; /* Убираем двойные линии между ячейками */
+		   }
+		   TD, TH {
+		    padding: 3px; /* Поля вокруг содержимого таблицы */
+		    border: 1px solid black; /* Параметры рамки */
+		   }
+		</style>
+	    <!--Let browser know website is optimized for mobile-->
+	    <meta name="viewport" content="width=device-width, initial-scale=1.0" charset="UTF-8"/>
+	</head>
+
+	<body>
+	<div id="app" style="margin-left: 20px; margin-top: 20px; margin-right: 20px; margin-bottom: 20px">
+		<div id="session-modal" class="modal">
+	  		<div class="modal-content">
+	      		<h4>Введите сессию</h4>
+	      		<div class="input-field">
+		        	<input id="last_name" type="text" class="validate" v-model="inSession">
+		        	<label for="last_name">Сессия</label>
+		        </div>
+		        <div class="input-field inline">
+					<a class="waves-effect waves-light btn cyan accent-4" v-on:click="load_session">Загрузить Сессию</a>
+	          	</div>
+	      		<!--<div class="input-field">
+	      			<textarea id="in-session-text-area" class="materialize-textarea">{{JSON.stringify(this.$data)}}</textarea>
+	      			<label for="in-session-text-area"></label>
+	      		</div>-->
+	    	</div>
+	  	</div>
+	    <span>Aleyron Could Service <i class="material-icons">wb_cloudy</i></span><br>
+	    <span>Печатных листов = {{plate.number}}</span><br>
+	    <span>Помещается на печатном листе = {{plate.size}}</span><br>
+	    <span>Количество видов = {{product_list_size}}</span><br>
+	    <span>Чужой оборот = {{divide === false ? 'нет':'да'}}</span><br>
+	    <span>Свой оборот = {{divide === false ? 'да':'нет'}}</span><br><br>
+	    <span>Таблица тиражей видов:</span><br>
+	    <table-product-type v-bind:arr="product_list"></table-product-type><br><br>
+	    <h5>Решение:</h5>
+	    <div style="border: 1px solid black">
+		    <span>Общий тираж = {{productSum}}</span><br>
+		    <span>Всего листов = {{pageSum}}</span><br>
+		    <span>Всего излишки = {{overSum}}</span><br>
+		    <ul>
+				<plate-result-view 
+					v-for="plate in plateRes"
+					v-bind:plate="plate"
+					v-bind:key="plate.id">
+				</plate-result-view>
+			</ul>
+		</div>
+    </div>
+	
+	<!--Import jQuery before materialize.js-->
+	<script type="text/javascript" src="js/jquery.js"></script>
+	<script type="text/javascript" src="js/materialize.js"></script>
+	<script type="text/javascript" src="js/vue.js"></script>
+	<script>
+	    if (!String.prototype.format) {
+	        String.prototype.format = function () {
+	            var args = arguments;
+	            return this.replace(/{(\d+)}/g, function (match, number) {
+	                return typeof args[number] != 'undefined'
+	                    ? args[number]
+	                    : match
+	                    ;
+	            });
+	        };
+	    };
+
+	    $(document).ready(function(){
+    		// the "href" attribute of the modal trigger must specify the modal ID that wants to be triggered
+    		$('.modal').modal();
+    		$('.modal').modal({
+				dismissible: false, 
+			});
+			$('#session-modal').modal('open');
+  		});
+
+	    Vue.component('input-product-type', {
+	        props: ['type'],
+	        template: '<tr><td><span>{{type.name}}</span></td><td><span>{{type.number}}</span></td></tr>',
+	        methods: {
+	            checkNumber: function (type) {
+	                a = type.number;
+	                s = '';
+	                for (var i = 0; i < a.length; ++i) {
+	                    if (a[i] < '0' || a[i] > '9') {
+	                        //break;
+	                    } else {
+	                    	if (s === '' && a[i] === '0') {
+	                    		continue;
+	                    	}
+	                        s = s + (a[i]);
+	                    }
+	                }
+	                if (s === '')
+	                	s = '0';
+	                type.number = s;
+	            }
+	        },
+	    });
+
+	    Vue.component('table-product-type', {
+	        props: ['arr'],
+	        template: '<table style=""><thead><tr><th><span>Вид</span></th><th>Тираж</th></tr></thead><tbody><input-product-type v-for="item in arr" v-bind:type="item" v-bind:key="item.id"></input-product-type></tbody></table>'
+	    });
+
+	    Vue.component('result-row', {
+	    	props: ['type'],
+	    	template: '<tr><td><span>{{type.tname}}</span></td><td><span>{{type.number}}</span></td><td><span>{{type.over}}</span></td></tr>'
+	    });
+	    Vue.component('table-plate-result', {
+	    	props: ['plate'],
+	    	template: '<table class="highlight centered"><thead><tr><th><span>Вид</span></th><th><span>Количество на пластине</span></th><th><span>Излишки</span></th></tr></thead><tbody><result-row v-for="type in plate.types" v-bind:type="type" v-bind:key="type.tname"></result-row></tbody></table>'
+	    });
+
+	    Vue.component('plate-result-view', {
+	    	props: ['plate'],
+	    	template: '<li><span>Печатная пластина #{{plate.id}}</span><br><span>листов = <span>{{plate.pageSum}}</span></span><br> <span>излишки = <span>{{plate.overSum}}</span></span><br><table-plate-result v-bind:plate="plate"> </table-plate-result> </li>',
+	    });
+	    var app = new Vue({
+	        el: '#app',
+	        data: {
+	        	plate: {
+	        		number: 0,
+	            	size: 0,
+	        	},
+	            product_list_size: 0,
+	            product_list: [
+	            ],
+	            result: [],
+	            pageSum: 0,
+	            overSum: 0,
+	            productSum: 0,
+	            plateRes: [],
+	            inSession: '',
+	            divide: true,
+	            
+	        },
+	        mounted: function () {
+        		
+        	},
+	        methods: {
+
+	            add_product_type: function () {
+	            	app.product_list_size++;
+	                app.product_list.push({id:app.product_list_size, name:app.product_list_size, number:0});
+	            },
+
+	            remove_product_type: function () {
+	                if (app.product_list_size === 0)
+	                    return;
+	                app.product_list_size--;
+	                app.product_list.pop();
+	            },
+
+	            solve: function () {
+	                var cnt = app.plate.number;
+	                var k = app.plate.size;
+	                var a = [];
+	                var b = [];
+	                if (app.product_list_size == 0) {
+	                	//alert("нечего просчитывать");
+	                	alert('нечего просчитывать')
+	                	return;
+	                }
+	                if (cnt * k  < app.product_list_size) {
+	                	alert('нет решения');
+	                	return;
+	                }
+	                for (var i = 0; i < app.product_list_size; ++i) {
+	                    if (app.product_list[i].number === '') {
+	                        //alert('не введено количество у вида с названием "' + app.product_list[i].name + '"');
+	                        alert('не введено количество у вида с названием "' + app.product_list[i].name + '"')
+	                    }
+	                    a.push([app.product_list[i].number, [app.product_list[i].id, app.product_list[i].name]]);
+	                }
+	                a.sort();
+	                var checkPlate = function (ql, qr) {
+	                	var l, r;
+	        		    l = 0;
+	    	        	r = 1000000;
+		            	var m = -1;
+		            	var check = function (m) {
+	                		var sum = 0;
+	            	    	for (var i = ql; i < qr; ++i) {
+		        	            sum += Math.ceil(a[i][0] / m);
+	    		            }
+		    	            return sum <= k;
+	            		}
+	            		while (r - l > 1) {
+			                m = ((r + l) >> 1);
+			                if (check(m, k)) {
+			                    r = m;
+			                } else {
+			                    l = m;
+			                }
+			            }
+			            /*
+						var sum = 0;
+		                for (var i = 0; i < a.length; ++i) {
+		                    $('#solv').append('<tr><td><span>{0}</span></td><td><span>{1}</span></td><td><span>{2}</span></td></tr>'.format(typename[i], Math.ceil(e[i] / m), m * Math.ceil(e[i] / m) - e[i]));
+		                    sum += m * Math.ceil(e[i] / m) - e[i];
+		                }
+			            */
+			            if (check(r, k)) {
+			                var sum = 0;
+			                for (var i = ql; i < qr; ++i) {
+			                    sum += r * Math.ceil(a[i][0] / r) - a[i][0];
+			                }
+			                return sum;
+			            } else {
+			                return 1000000000;
+			            }
+	                };
+	                var checkPlateM = function (ql, qr) {
+	                	var l, r;
+	        		    l = 0;
+	    	        	r = 1000000;
+		            	var m = -1;
+		            	var check = function (m) {
+	                		var sum = 0;
+	            	    	for (var i = ql; i < qr; ++i) {
+		        	            sum += Math.ceil(a[i][0] / m);
+	    		            }
+		    	            return sum <= k;
+	            		}
+	            		while (r - l > 1) {
+			                m = ((r + l) >> 1);
+			                if (check(m, k)) {
+			                    r = m;
+			                } else {
+			                    l = m;
+			                }
+			            }
+			            /*
+						var sum = 0;
+		                for (var i = 0; i < a.length; ++i) {
+		                    $('#solv').append('<tr><td><span>{0}</span></td><td><span>{1}</span></td><td><span>{2}</span></td></tr>'.format(typename[i], Math.ceil(e[i] / m), m * Math.ceil(e[i] / m) - e[i]));
+		                    sum += m * Math.ceil(e[i] / m) - e[i];
+		                }
+			            */
+			            if (check(r, k)) {
+			                return r;
+			            } else {
+			                return 1000000000;
+			            }
+	                };
+	                var dp = [];
+	                var p = [];
+	                for (var i = 0; i < app.product_list_size; ++i) {
+	                	dp.push([]);
+	                	p.push([]);
+	                }
+	                for (var i = 0; i < app.product_list_size; ++i) {
+	                	for (var j = 0; j < cnt; ++j) {
+	                		dp[i][j] = 1000000000;
+	                	}
+	                }
+	                for (var i = 0; i < app.product_list_size; ++i) {
+	                	dp[i][0] = checkPlate(0, i + 1);
+	                }
+	                p[0][0] = -1;
+	                for (var i = 1; i < app.product_list_size; ++i) {
+	                	for (var j = 1; j < cnt; ++j) {
+	                		for (var l = i; l > 0; --l) {
+	                			if ((i - l + 1 <= k) && dp[i][j] > dp[l - 1][j - 1] + (a[i][0] - a[l][0])) {//checkPlate(l, i + 1)) {
+	                				p[i][j] = l - 1;
+	                				dp[i][j] = dp[l - 1][j - 1] + (a[i][0] - a[l][0]);//checkPlate(l, i + 1);
+	                			}
+	                			//dp[i][j] = Math.min (dp[i][j], dp[l - 1][j - 1] + checkPlate(l, i + 1));
+	                		}
+	                	}
+	                }
+	                if (dp[app.product_list_size - 1][cnt - 1] >= 1000000000)
+	                	alert('нет рещения!!!')
+	                else {
+	                	var j = app.product_list_size - 1;
+	                	var c = cnt - 1;
+	                	var l = p[j][c];
+	                	app.result = [];
+	                	for (var i = 0; i < cnt; ++i)
+	                		app.result.push([]);
+	                	while (j >= 0) {
+	                		if (j == l) {
+	                			c--;
+	                			//app.result[c] = [];
+	                			l = p[j][c];
+	                		}
+	                		//console.log(app.result);
+	                		app.result[c].push(a[j]);
+	                		//console.log(app.result);
+	                		j--;
+	                	}
+
+	                } 
+
+	                var update = function (id) {
+	                	var e = [];
+	                	var getM = function () {
+		                	var l, r;
+		        		    l = 0;
+		    	        	r = 1000000;
+			            	var m = -1;
+			            	var check = function (m) {
+		                		var sum = 0;
+		            	    	for (var i = 0; i < app.result[id].length; ++i) {
+			        	            sum += Math.ceil(app.result[id][i][0] / m);
+		    		            }
+			    	            return sum <= k;
+		            		}
+		            		while (r - l > 1) {
+				                m = ((r + l) >> 1);
+				                if (check(m, k)) {
+				                    r = m;
+				                } else {
+				                    l = m;
+				                }
+				            }
+				            if (check(r, k)) {
+				                return r;
+				            } else {
+				                return 1000000000;
+				            }
+		                };
+		                var m = getM();
+		                app.plateRes[id].pageSum = m;
+		                app.plateRes[id].overSum = 0;
+		                app.plateRes[id].types = [];
+		                app.plateRes[id].id = id + 1;
+		                //console.log(123);
+		                for (var i = 0; i < app.result[id].length; ++i) {
+		                	app.plateRes[id].types.push({});
+		                }
+
+		                for (var i = 0; i < app.result[id].length; ++i) {
+		                	//console.log(app.plateRes[id].types[i]);
+		                	app.plateRes[id].types[i].over = Math.ceil(app.result[id][i][0]/m) * m - app.result[id][i][0];
+		                	app.productSum += Math.ceil(app.result[id][i][0]/m) * m;
+		                	app.plateRes[id].types[i].number = Math.ceil(app.result[id][i][0]/m);
+		                	app.plateRes[id].types[i].tname = app.result[id][i][1][1];
+		                	app.plateRes[id].overSum += app.plateRes[id].types[i].over;
+
+		                }
+		                app.overSum += app.plateRes[id].overSum;
+		                app.pageSum += app.plateRes[id].pageSum;
+	                };
+	                app.plateRes = [];
+	                app.overSum = 0;
+	                app.pageSum = 0;
+	                app.productSum = 0;
+	                for (var i = 0; i < cnt; ++i) {
+	                	app.plateRes.push({});
+	                	update(i);
+	                }
+	            },
+	            checkPlateNumber: function (plate) {
+	                a = plate.number;
+	                s = '';
+	                for (var i = 0; i < a.length; ++i) {
+	                    if (a[i] < '0' || a[i] > '9') {
+	                        //break;
+	                    } else {
+	                    	if (s === '' && a[i] === '0') {
+	                    		continue;
+	                    	}
+	                        s = s + (a[i]);
+	                    }
+	                }
+	                if (s === '')
+	                	s = '0';
+	                plate.number = s;
+	                //console.log(s);
+	            },
+	            checkPlateSize: function (plate) {
+	                a = plate.size;
+	                s = '';
+	                for (var i = 0; i < a.length; ++i) {
+	                    if (a[i] < '0' || a[i] > '9') {
+	                        //break;
+	                    } else {
+	                    	if (s === '' && a[i] === '0') {
+	                    		continue;
+	                    	}
+	                        s = s + (a[i]);
+	                    }
+	                }
+	                if (s === '')
+	                	s = '0';
+	                plate.size = s;
+	                //console.log(s);
+	            },
+
+				load_session: function () {
+					console.log(123);
+					try {
+					var session = JSON.parse(this.	decode_string(this.inSession));
+					} catch (e) {
+						alert('Сессия не ведина или не правильная');
+						return;
+					}
+					Object.assign(this.$data, session);
+					this.solve();
+					$('#session-modal').modal('close');
+				},
+
+				code_int: function(x) {
+					var e = "0123456789ABCDEF";
+					var s = '';
+					while(x > 0) {
+						s = s + e[x%16];
+						x = Math.floor(x/16)
+					} 
+					return s;
+				},
+
+				decode_int: function(x) {
+					var e = {'0': 0, '1': 1, '2': 2, '3': 3, '4': 4,
+						'5': 5, '6': 6, '7': 7, '8': 8, '9': 9,
+						'A': 10, 'B': 11, 'C': 12, 'D': 13, 'E': 14, 'F': 15};
+					return e[x[0]] + e[x[1]]*16;
+				},
+
+				code_string: function (x) {
+					var s = '';
+					for (var i = 0; i < x.length; ++i) {
+						s = s + this.code_int(x.charCodeAt(i));
+					}
+					return s;
+				},
+
+				decode_string: function (x) {
+					var s = '';
+					for (var i = 1; i < x.length; i += 2) {
+						s = s + String.fromCharCode(this.decode_int(x[i - 1] + x[i]));
+					}
+					return s;
+				},
+	        }
+
+	    });
+	</script>
+	</body>
+	</html>
+
