@@ -15,14 +15,19 @@
 	    <nav class="cyan">
 	        <div class="container">
 	            <div class="nav-wrapper">
-	                <a href="#" class="brand-logo center">Aleyron Utils</a>
+	                <a href="#" class="brand-logo center">Aleyron Could Service<i class="material-icons">wb_cloudy</i></a>
 	            </div>
 	        </div>
 	    </nav>
 	</header>
 	<div class="container" id="app">
+		<div class="row">
+			<blockquote>
+		      	Сохраняйте сессию во избежания потери времени!!!
+		    </blockquote>
+		</div>
 	    <div class="row">
-	        <div class="col m12">
+	        <div class="col m8 s12">
 	            <div class="card hoverable">
 	                <div class="card-content">
 	                    <span class="card-title">Ввод</span>
@@ -56,23 +61,6 @@
 	                            </div>
 	                            
 	                        </div>
-	                    </div>
-	                    <div class="row">
-	                    	<div class="col m12">
-	                    		<span class="flow-text">Опции</span>
-	                    	</div>
-	                    	<div class="row">
-	                    		<div class="col m6">
-		                            <p>
-										<input class="cyan" name="group1" type="radio" id="test1" checked/>
-										<label for="test1">Чужой оборот</label>
-									</p>
-									<p>
-										<input class="cyan" name="group1" type="radio" id="test2"/>
-										<label for="test2">Свой оборот</label>
-		    						</p>
-								</div>
-	                    	</div>
 	                    </div>
 	                    <!--<div class="row">
 	                            <div class="input-field col m12"> 
@@ -113,13 +101,82 @@
 	                        </div>
 	                    </div>
 	                    <div class="card-action">
-	                   		<a class="waves-effect waves-light btn  cyan accent-4" v-on:click="solve" >Просчитать</a>
+	                    	<a class="waves-effect waves-light btn  cyan accent-4" v-on:click="solve" >Просчитать</a>
 	                	</div>
 	                </div>
 	            </div>
 	        </div>
+	        <div class="col m4 s12">
+	        	<div class="row">
+		        	<div class="card hoverable col m12">
+		                <div class="card-content">
+		                    <span class="card-title">Опции</span>
+		                    <div class="row">
+	                    		<div class="col m12">
+		                            <p>
+										<input checked class="cyan" name="group1" type="radio" id="test1" v-on:change="val => {devide = val}" />
+										<label for="test1">Чужой оборот</label>
+									</p>
+									<p>
+										<input class="cyan" name="group1" type="radio" id="test2" disabled="" />
+										<label for="test2">Свой оборот</label>
+		    						</p>
+		    						<p>
+		    							<div class="input-field inline">
+							            	<a class="waves-effect waves-light btn cyan accent-4" href="print.html" vtarget="_blank">Печать</a>
+										</div>
+		    						</p>
+								</div>
+		                    </div>
+		                </div>
+		            </div>
+	            </div>
+	            <div class="row">
+		        	<div class="card hoverable col m12">
+		                <div class="card-content">
+		                    <span class="card-title">Сессия</span>
+		                    <div class="row">
+		                    	<div class="col m12">
+		                    		<!-- Modal Trigger -->
+								  	<a class="waves-effect waves-light btn modal-trigger cyan accent-4" href="#session-modal">Сохранить</a>
+								  	<!-- Modal Structure -->
+								  	<div id="session-modal" class="modal">
+								  		<div class="modal-content">
+								      		<h4>Ваша сессия</h4>
+								      		<div class="input-field">
+									        	<input id="last_name" type="text" class="validate" :value="getSession()">
+									        	<label for="last_name">Сессия</label>
+									        </div>
+								      		<!--<div class="input-field">
+								      			<textarea id="in-session-text-area" class="materialize-textarea">{{JSON.stringify(this.$data)}}</textarea>
+								      			<label for="in-session-text-area"></label>
+								      		</div>-->
+								      		<p>Сохраните набор символов с верху</p>
+								    	</div>
+								    	<div class="modal-footer">
+								    		<a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Закрыть</a>
+								    	</div>
+								  	</div>
+								</div>
+		                    </div>
+		                    <div class="divider"></div>
+		                    <div class="row">
+		                    	<div class="col m12">
+		                    		<div class="input-field inline">
+							            <input id="inSession" type="text" v-model="inSession" >
+							            <label for="inSession" data-error="wrong" data-success="right">Вставте сессию</label>
+          							</div>
+          							<div class="input-field inline">
+							            <a class="waves-effect waves-light btn cyan accent-4" v-on:click="load_session">Загрузить Сессию</a>
+          							</div>
+		                    	</div>
+		                    </div>
+		                </div>
+		            </div>
+	            </div>
+	        </div>
 	    </div>
-	    <div class="row col m12">
+	    <div class="row">
 	    	<div class="col m12">
 	    		<div class="card hoverable">
 		    		<div class="card-content">
@@ -128,13 +185,13 @@
 	                    	<div class="col m12 center-align">
 	                    		<!--<table-plate-result v-bind:result="result[0]" v-bind:plate_id="0"></table-plate-result>-->
 	                    		<div class="col m5">
-	                    		<span class="flow-text text-accent-4 ">Всего будет отпечатано: <span>{{productSum}}</span></span>
+	                    		<span class="flow-text text-accent-4 ">Общий тираж: <span>{{productSum}}</span></span>
 	                    		</div>
 	                    		<div class="col m3">
 	                    		<span class="flow-text green-text text-accent-4 ">Всего листов: <span>{{pageSum}}</span></span>
 	                    		</div>
 	                    		<div class="col m4">
-	                    		<span class="flow-text red-text text-accent-4">Всего излишок: <span>{{overSum}}</span></span>
+	                    		<span class="flow-text red-text text-accent-4">Всего излишки: <span>{{overSum}}</span></span>
 	                    		</div>
 	                    	</div>
 	                    </div>
@@ -167,6 +224,20 @@
 		   	</div>
 	    </div>
 	</div>
+
+
+	<!-- bottom footer -->
+	<footer class="page-footer cyan">
+          <div class="container">
+            
+          </div>
+          <div class="footer-copyright">
+            <div class="container">
+            © 2017 Ruslan Jankurazov, All rights reserved.
+            </div>
+          </div>
+        </footer>
+
 	<!--Import jQuery before materialize.js-->
 	<script type="text/javascript" src="js/jquery.js"></script>
 	<script type="text/javascript" src="js/materialize.js"></script>
@@ -183,7 +254,10 @@
 	            });
 	        };
 	    };
-
+		$(document).ready(function(){
+    		// the "href" attribute of the modal trigger must specify the modal ID that wants to be triggered
+    		$('.modal').modal();
+  		});
 
 	    Vue.component('input-product-type', {
 	        props: ['type'],
@@ -225,9 +299,8 @@
 
 	    Vue.component('plate-result-view', {
 	    	props: ['plate'],
-	    	template: '<li><div class="collapsible-header"><span>Печатная пластина #{{plate.id}}</span></div><div class="collapsible-body"><div class="row"><div class="col m12 center-align"> <!--<table-plate-result v-bind:result="result[0]" v-bind:plate_id="0"></table-plate-result>--> <div class="col m6"> <span class="flow-text green-text text-accent-4 ">листов: <span>{{plate.pageSum}}</span></span> </div> <div class="col m6"> <span class="flow-text red-text text-accent-4">излишок: <span>{{plate.overSum}}</span></span> </div> </div> </div> <div class="row"> <div class="col m12"> <table-plate-result v-bind:plate="plate"> </table-plate-result> </div> </div> </div> </li>',
+	    	template: '<li><div class="collapsible-header"><span>Печатная пластина #{{plate.id}}</span></div><div class="collapsible-body"><div class="row"><div class="col m12 center-align"> <!--<table-plate-result v-bind:result="result[0]" v-bind:plate_id="0"></table-plate-result>--> <div class="col m6"> <span class="flow-text green-text text-accent-4 ">листов: <span>{{plate.pageSum}}</span></span> </div> <div class="col m6"> <span class="flow-text red-text text-accent-4">излишки: <span>{{plate.overSum}}</span></span> </div> </div> </div> <div class="row"> <div class="col m12"> <table-plate-result v-bind:plate="plate"> </table-plate-result> </div> </div> </div> </li>',
 	    });
-
 	    var app = new Vue({
 	        el: '#app',
 	        data: {
@@ -243,6 +316,8 @@
 	            overSum: 0,
 	            productSum: 0,
 	            plateRes: [],
+	            inSession: '',
+	            devide: true,
 	            
 	        },
 	        methods: {
@@ -265,7 +340,11 @@
 	                var b = [];
 	                if (app.product_list_size == 0) {
 	                	//alert("нечего просчитывать");
-	                	Materialize.toast('нечего просчитывать', 5000)
+	                		Materialize.toast('нечего просчитывать', 5000)
+	                	return;
+	                }
+	                if (cnt * k  < app.product_list_size) {
+	                	Materialize.toast('нет решения', 10000);
 	                	return;
 	                }
 	                for (var i = 0; i < app.product_list_size; ++i) {
@@ -364,7 +443,7 @@
 	                for (var i = 1; i < app.product_list_size; ++i) {
 	                	for (var j = 1; j < cnt; ++j) {
 	                		for (var l = i; l > 0; --l) {
-	                			if (dp[i][j] > dp[l - 1][j - 1] + (a[i][0] - a[l][0])) {//checkPlate(l, i + 1)) {
+	                			if ((i - l + 1 <= k) && dp[i][j] > dp[l - 1][j - 1] + (a[i][0] - a[l][0])) {//checkPlate(l, i + 1)) {
 	                				p[i][j] = l - 1;
 	                				dp[i][j] = dp[l - 1][j - 1] + (a[i][0] - a[l][0]);//checkPlate(l, i + 1);
 	                			}
@@ -372,7 +451,7 @@
 	                		}
 	                	}
 	                }
-	                if (dp[app.product_list_size - 1][cnt - 1] === 1000000000)
+	                if (dp[app.product_list_size - 1][cnt - 1] >= 1000000000)
 	                	Materialize.toast('нет рещения!!!', 4000)
 	                else {
 	                	var j = app.product_list_size - 1;
@@ -428,7 +507,6 @@
 		                app.plateRes[id].overSum = 0;
 		                app.plateRes[id].types = [];
 		                app.plateRes[id].id = id + 1;
-		                app.productSum = 0;
 		                //console.log(123);
 		                for (var i = 0; i < app.result[id].length; ++i) {
 		                	app.plateRes[id].types.push({});
@@ -449,6 +527,7 @@
 	                app.plateRes = [];
 	                app.overSum = 0;
 	                app.pageSum = 0;
+	                app.productSum = 0;
 	                for (var i = 0; i < cnt; ++i) {
 	                	app.plateRes.push({});
 	                	update(i);
@@ -490,6 +569,137 @@
 	                plate.size = s;
 	                //console.log(s);
 	            },
+
+	            getSession: function() {
+	            	var s = JSON.parse((JSON.stringify(this.$data)));
+	            	s.result = [];
+		            s.pageSum = 0;
+		            s.overSum = 0;
+		            s.productSum = 0;
+		            s.plateRes = [];
+		            s.inSession = '';
+		            return this.code_string(JSON.stringify(s));
+	            }, 
+
+				load_session: function () {
+					try {
+					var session = JSON.parse(this.	decode_string(this.inSession));
+					} catch (e) {
+						Materialize.toast('Сессия не ведина или не правильная (^_^)', 5000);
+						return;
+					}
+					Object.assign(this.$data, session);
+					this.solve();
+				},
+
+				getDict: function() {
+					//var s = 'abcde'
+					var s = ' !"#$%&\'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯабвгдежзийклмнопрстуфхцчшщъыьэюя';
+					var d = {};
+					for (var i = 0; i < s.length; ++i) {
+						d[s[i]] = i;
+					}
+					return d;
+				},
+
+				getReDict: function() {
+					var s = ' !"#$%&\'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~' +
+					+ 'АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯабвгдежзийклмнопрстуфхцчшщъыьэюя';
+					var d = {};
+					for (var i = 0; i < s.length; ++i) {
+						d[i] = s[i];
+					}
+					return d;
+				},
+
+				code_LZW: function (x) {
+					var s = '';
+					var d = this.getDict();
+					if (x.length == 0) {
+						alert('code_LZW: была переданна пустая строка (-__-)');
+						return '';
+					}
+					var cur = x[0];
+					var cnt = Object.keys(d).length;
+					var e = 1;
+					for (var i = 1; i <= x.length; ++i) {
+						if (i === x.length) {
+							s = s + (d[cur]).toString() + '_';
+							break;
+						}
+						if (d[(cur + x[i])] === undefined) {
+							s = s + (d[cur]).toString() + '_';
+							d[(cur + x[i])] = cnt;
+							cur = x[i];
+							cnt++;
+							e++;
+						} else {
+							cur = cur + x[i];
+							//s = s + (d[cur]).toString() + '_';
+						}
+					}
+					console.log(e);
+					return s + 'E';
+				},
+
+				decode_LZW: function (x) {
+					var s = '';
+					var d = getDict();
+					if (x.length === 0) {
+						alert('decode_LZW: была переданна пустая строка (-__-)');
+						return '';
+					}
+					var f = getReDict();
+					var cnt = Object.keys(d).length;
+					var i = 0;
+					var cur = '';
+					while (i < x.length && x[i] != '_') {
+						cur = cur + x[i];
+					}
+					i++;
+					cur = Number(cur);
+					for (; i <= x.length; ++i) {
+						if (i === x.length) {
+							s = s + f[cur];
+							break;
+						}
+						//if (f[(cur + )])
+					}
+					return s;
+				},
+
+				code_int: function(x) {
+					var e = "0123456789ABCDEF";
+					var s = '';
+					while(x > 0) {
+						s = s + e[x%16];
+						x = Math.floor(x/16)
+					} 
+					return s;
+				},
+
+				decode_int: function(x) {
+					var e = {'0': 0, '1': 1, '2': 2, '3': 3, '4': 4,
+						'5': 5, '6': 6, '7': 7, '8': 8, '9': 9,
+						'A': 10, 'B': 11, 'C': 12, 'D': 13, 'E': 14, 'F': 15};
+					return e[x[0]] + e[x[1]]*16;
+				},
+
+				code_string: function (x) {
+					var s = '';
+					for (var i = 0; i < x.length; ++i) {
+						s = s + this.code_int(x.charCodeAt(i));
+					}
+					return s;
+				},
+
+				decode_string: function (x) {
+					var s = '';
+					for (var i = 1; i < x.length; i += 2) {
+						s = s + String.fromCharCode(this.decode_int(x[i - 1] + x[i]));
+					}
+					return s;
+				},
 	        }
 
 	    });
