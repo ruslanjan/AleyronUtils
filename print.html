@@ -21,7 +21,7 @@
 
 	<body>
 	<div id="app" style="margin-left: 20px; margin-top: 20px; margin-right: 20px; margin-bottom: 20px">
-		<div id="session-modal" class="modal">
+		<div id="session-modal-print" class="modal">
 	  		<div class="modal-content">
 	      		<h4>Введите сессию</h4>
 	      		<div class="input-field">
@@ -44,18 +44,18 @@
 	    <span>Чужой оборот = {{divide === false ? 'нет':'да'}}</span><br>
 	    <span>Свой оборот = {{divide === false ? 'да':'нет'}}</span><br><br>
 	    <span>Таблица тиражей видов:</span><br>
-	    <table-product-type v-bind:arr="product_list"></table-product-type><br><br>
+	    <table-product-type-print v-bind:arr="product_list"></table-product-type-print><br><br>
 	    <h5>Решение:</h5>
 	    <div style="border: 1px solid black">
 		    <span>Общий тираж = {{productSum}}</span><br>
 		    <span>Всего листов = {{pageSum}}</span><br>
 		    <span>Всего излишки = {{overSum}}</span><br>
 		    <ul>
-				<plate-result-view 
+				<plate-result-view-print
 					v-for="plate in plateRes"
 					v-bind:plate="plate"
 					v-bind:key="plate.id">
-				</plate-result-view>
+				</plate-result-view-print>
 			</ul>
 		</div>
     </div>
@@ -64,6 +64,7 @@
 	<script type="text/javascript" src="js/jquery.js"></script>
 	<script type="text/javascript" src="js/materialize.js"></script>
 	<script type="text/javascript" src="js/vue.js"></script>
+    <script type="text/javascript" src="js/print-comp.js"></script>
 	<script>
 	    if (!String.prototype.format) {
 	        String.prototype.format = function () {
@@ -77,57 +78,6 @@
 	        };
 	    };
 
-	    $(document).ready(function(){
-    		// the "href" attribute of the modal trigger must specify the modal ID that wants to be triggered
-    		$('.modal').modal();
-    		$('.modal').modal({
-				dismissible: false, 
-			});
-			$('#session-modal').modal('open');
-  		});
-
-	    Vue.component('input-product-type', {
-	        props: ['type'],
-	        template: '<tr><td><span>{{type.name}}</span></td><td><span>{{type.number}}</span></td></tr>',
-	        methods: {
-	            checkNumber: function (type) {
-	                a = type.number;
-	                s = '';
-	                for (var i = 0; i < a.length; ++i) {
-	                    if (a[i] < '0' || a[i] > '9') {
-	                        //break;
-	                    } else {
-	                    	if (s === '' && a[i] === '0') {
-	                    		continue;
-	                    	}
-	                        s = s + (a[i]);
-	                    }
-	                }
-	                if (s === '')
-	                	s = '0';
-	                type.number = s;
-	            }
-	        },
-	    });
-
-	    Vue.component('table-product-type', {
-	        props: ['arr'],
-	        template: '<table style=""><thead><tr><th><span>Вид</span></th><th>Тираж</th></tr></thead><tbody><input-product-type v-for="item in arr" v-bind:type="item" v-bind:key="item.id"></input-product-type></tbody></table>'
-	    });
-
-	    Vue.component('result-row', {
-	    	props: ['type'],
-	    	template: '<tr><td><span>{{type.tname}}</span></td><td><span>{{type.number}}</span></td><td><span>{{type.over}}</span></td></tr>'
-	    });
-	    Vue.component('table-plate-result', {
-	    	props: ['plate'],
-	    	template: '<table class="highlight centered"><thead><tr><th><span>Вид</span></th><th><span>Количество на пластине</span></th><th><span>Излишки</span></th></tr></thead><tbody><result-row v-for="type in plate.types" v-bind:type="type" v-bind:key="type.tname"></result-row></tbody></table>'
-	    });
-
-	    Vue.component('plate-result-view', {
-	    	props: ['plate'],
-	    	template: '<li><span>Печатная пластина #{{plate.id}}</span><br><span>листов = <span>{{plate.pageSum}}</span></span><br> <span>излишки = <span>{{plate.overSum}}</span></span><br><table-plate-result v-bind:plate="plate"> </table-plate-result> </li>',
-	    });
 	    var app = new Vue({
 	        el: '#app',
 	        data: {
