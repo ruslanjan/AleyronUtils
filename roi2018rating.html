@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>ROI 2018 Rating</title>
+        <link rel="stylesheet" href="roi2018rating.css">
+    </head>
+    <body>
+        <div id="app">
+            <header>
+                <h1>
+                    ROI 2018 Online Rating
+                </h1>
+            </header>
+
+            <div class="main">
+                <h2>Please feel free to vote.</h2>
+                <h3>
+                    Rating: {{rating}}
+                </h3>
+                <div>
+                    <span>
+                        <button v-on:click="if(f === false){rating++; f = true;}else rating='Cheater'">UP</button>
+                        <button v-on:click="if(f === false){rating--; f = true;}else rating='Cheater'">DOWN</button>
+                    </span>
+                </div>
+            </div>
+
+            <div class="footer">
+                <p>All rights received!</p>
+            </div>
+        </div>
+        <script src="js/vue.js"></script>
+        <script>
+            var app = new Vue({
+                el: '#app',
+                data: {
+                    rating: 0,
+                    f: false,
+                },
+
+                methods: {
+                    calc: function () {
+                        let cnt = 0;
+                        let res = Math.floor(((new Date()).getTime() - 1521222927580)/10000);
+                        for (let i = 2; i*i <= res; ++i) {
+                            while (res%i === 0) {
+                                cnt++;
+                                res /= i;
+                            }
+                        }
+                        cnt++;
+                        this.rating = cnt;
+                    }
+                },
+
+                mounted: function () {
+                    this.calc();
+                    setInterval(function () {
+                        this.calc();
+                    }.bind(this), 10000);
+                }
+            })
+        </script>
+    </body>
+</html>
